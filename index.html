@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173f35">
+  <meta name="description" content="Acompanhe sua alimentação, hidratação e treinos durante 30 dias.">
+  <title>Desafio 30 Dias</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="Desafio 30 Dias, início">
+      <span class="brand-mark" aria-hidden="true">30</span>
+      <span>Desafio <strong>30 Dias</strong></span>
+    </a>
+    <button id="install-button" class="button button-light hidden" type="button">Instalar app</button>
+  </header>
+
+  <main class="container">
+    <section id="inicio" class="page active" aria-labelledby="welcome-title">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">UM DIA DE CADA VEZ</p>
+          <h1 id="welcome-title">Seu desafio,<br><span>seu progresso.</span></h1>
+          <p class="hero-copy">Acompanhe suas refeições, água e treinos ao longo dos próximos 30 dias.</p>
+        </div>
+        <div class="hero-badge" aria-hidden="true">30<br><small>DIAS</small></div>
+      </div>
+
+      <div class="stats-grid">
+        <article class="card stat-card">
+          <span class="stat-label">Dia do desafio</span>
+          <strong id="current-day-stat" class="stat-number">1 / 30</strong>
+          <span id="challenge-date" class="muted"></span>
+        </article>
+        <article class="card stat-card">
+          <span class="stat-label">Dias concluídos</span>
+          <strong id="completed-days-stat" class="stat-number">0</strong>
+          <span class="muted">de 30 dias</span>
+        </article>
+        <article class="card stat-card">
+          <span class="stat-label">Sequência atual</span>
+          <strong id="streak-stat" class="stat-number">0</strong>
+          <span class="muted">dias seguidos</span>
+        </article>
+        <article class="card stat-card">
+          <span class="stat-label">Treinos realizados</span>
+          <strong id="workouts-stat" class="stat-number">0</strong>
+          <span class="muted">no desafio</span>
+        </article>
+      </div>
+
+      <section class="card progress-card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">VISÃO GERAL</p>
+            <h2>Progresso dos 30 dias</h2>
+          </div>
+          <strong id="progress-label">0%</strong>
+        </div>
+        <div class="progress-track" role="progressbar" aria-label="Progresso do desafio"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="challenge-progress">
+          <div id="challenge-progress-fill" class="progress-fill"></div>
+        </div>
+        <div class="progress-meta">
+          <span id="meals-count">0 refeições cumpridas</span>
+          <span id="clean-days-count">0 dias sem itens evitados</span>
+        </div>
+        <div id="day-grid" class="day-grid" aria-label="Dias do desafio"></div>
+      </section>
+
+      <section class="card water-card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">HIDRATAÇÃO DE HOJE</p>
+            <h2>Água</h2>
+          </div>
+          <span id="water-count" class="water-count">0 ml</span>
+        </div>
+        <div class="progress-track water-track" role="progressbar" aria-label="Progresso da água"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="water-progress">
+          <div id="water-progress-fill" class="progress-fill"></div>
+        </div>
+        <div class="water-footer">
+          <span id="water-goal-label" class="muted">Meta: 2.000 ml</span>
+          <div class="button-row">
+            <button id="remove-water" class="button button-outline" type="button" aria-label="Remover um copo">− 1 copo</button>
+            <button id="add-water" class="button button-primary" type="button">+ 1 copo</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card quick-card">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">RESUMO DO DIA</p>
+            <h2 id="selected-day-title">Checklist diário</h2>
+          </div>
+          <button class="text-button" type="button" data-go="diario">Abrir checklist →</button>
+        </div>
+        <div id="today-summary" class="summary-list"></div>
+      </section>
+
+      <aside class="notice">
+        <span aria-hidden="true">🌿</span>
+        <p>Se estiver muito cansado ou sonolento após o trabalho, priorize sua segurança e recuperação. Ajuste o horário do treino conforme orientação do seu treinador.</p>
+      </aside>
+    </section>
+
+    <section id="diario" class="page" aria-labelledby="daily-title">
+      <div class="page-heading">
+        <p class="eyebrow">ACOMPANHAMENTO</p>
+        <h1 id="daily-title">Checklist diário</h1>
+        <p class="muted">Escolha um dia e marque os itens conforme avançar.</p>
+      </div>
+      <div class="card day-picker-card">
+        <label for="day-select">Dia do desafio</label>
+        <select id="day-select" class="select-input"></select>
+        <p id="day-date-label" class="muted"></p>
+      </div>
+
+      <div class="checklist-layout">
+        <section class="card checklist-card">
+          <h2>Alimentação</h2>
+          <p class="muted">Três refeições principais, sem obrigação de fazer lanches.</p>
+          <label class="check-row">
+            <input type="checkbox" data-check="breakfast">
+            <span class="check-custom"></span>
+            <span><strong>Café da manhã</strong><small>Ovos, tapioca ou cuscuz e uma fruta</small></span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" data-check="lunch">
+            <span class="check-custom"></span>
+            <span><strong>Almoço</strong><small>Proteína, arroz e feijão, salada ou legumes</small></span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" data-check="dinner">
+            <span class="check-custom"></span>
+            <span><strong>Jantar</strong><small>Proteína, acompanhamento e legumes ou salada</small></span>
+          </label>
+        </section>
+
+        <section class="card checklist-card">
+          <h2>Hidratação e treino</h2>
+          <p class="muted">A água é contabilizada pelos copos registrados no painel.</p>
+          <label class="check-row">
+            <input type="checkbox" data-check="water">
+            <span class="check-custom"></span>
+            <span><strong>Meta de água atingida</strong><small id="daily-water-hint">Acompanhe sua meta no painel</small></span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" data-check="workout">
+            <span class="check-custom"></span>
+            <span><strong>Treino realizado</strong><small>Escolha o horário de acordo com sua rotina</small></span>
+          </label>
+          <div class="notice notice-small">
+            <span aria-hidden="true">💚</span>
+            <p>Se estiver muito cansado ou sonolento após o trabalho, priorize sua segurança e recuperação. Ajuste o horário do treino conforme orientação do seu treinador.</p>
+          </div>
+        </section>
+
+        <section class="card checklist-card">
+          <h2>Disciplina</h2>
+          <p class="muted">Marque os objetivos que você cumpriu neste dia.</p>
+          <label class="check-row">
+            <input type="checkbox" data-check="sugar">
+            <span class="check-custom"></span>
+            <span><strong>Não consumi açúcar adicionado</strong><small>Inclui doces e bebidas açucaradas</small></span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" data-check="gluten">
+            <span class="check-custom"></span>
+            <span><strong>Não consumi glúten</strong><small>Confira trigo e possíveis contaminações</small></span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" data-check="dairy">
+            <span class="check-custom"></span>
+            <span><strong>Segui meu objetivo para leite e derivados</strong><small>Defina se vai evitar lactose ou todos os laticínios</small></span>
+          </label>
+        </section>
+      </div>
+    </section>
+
+    <section id="pode" class="page" aria-labelledby="foods-title">
+      <div class="page-heading">
+        <p class="eyebrow">IDEIAS PARA SUA ROTINA</p>
+        <h1 id="foods-title">Lista “Pode”</h1>
+        <p class="muted">Marque o que já tem em casa. A lista fica salva neste navegador.</p>
+      </div>
+      <div id="allowed-foods" class="food-grid"></div>
+    </section>
+
+    <section id="evitar" class="page" aria-labelledby="avoid-title">
+      <div class="page-heading">
+        <p class="eyebrow">SEU OBJETIVO</p>
+        <h1 id="avoid-title">Lista “Evitar”</h1>
+        <p class="muted">Confira os ingredientes e escolha produtos de acordo com seu objetivo.</p>
+      </div>
+      <div id="avoid-foods" class="food-grid"></div>
+      <aside class="notice">
+        <span aria-hidden="true">🔎</span>
+        <p>Esta é uma lista de referência. Leia os rótulos de cada produto, inclusive os que parecem naturalmente simples.</p>
+      </aside>
+    </section>
+
+    <section id="rotulos" class="page" aria-labelledby="labels-title">
+      <div class="page-heading">
+        <p class="eyebrow">COMPRAS COM ATENÇÃO</p>
+        <h1 id="labels-title">Atenção aos rótulos</h1>
+        <p class="muted">Produtos industrializados podem conter ingredientes inesperados.</p>
+      </div>
+      <div class="label-cards">
+        <article class="card label-card">
+          <span class="label-icon" aria-hidden="true">🥛</span>
+          <div><h2>“Sem lactose” não significa “sem leite”</h2><p>Um produto sem lactose ainda pode conter leite e proteínas do leite. Se seu objetivo é evitar todos os laticínios, confira a lista de ingredientes e os avisos de alergênicos.</p></div>
+        </article>
+        <article class="card label-card">
+          <span class="label-icon" aria-hidden="true">🌾</span>
+          <div><h2>“Sem glúten” não define todo o produto</h2><p>Um produto sem glúten ainda pode conter açúcar adicionado, leite ou outros ingredientes que não fazem parte do seu objetivo alimentar.</p></div>
+        </article>
+        <article class="card label-card">
+          <span class="label-icon" aria-hidden="true">📋</span>
+          <div><h2>Leia a lista de ingredientes</h2><p>Confira os ingredientes e os alertas de alergênicos em produtos industrializados. Receitas e formulações podem variar entre marcas.</p></div>
+        </article>
+      </div>
+      <p class="disclaimer">O aplicativo é uma ferramenta de organização pessoal, não substitui orientação individual de nutricionista ou profissional de saúde.</p>
+    </section>
+
+    <section id="ajustes" class="page" aria-labelledby="settings-title">
+      <div class="page-heading">
+        <p class="eyebrow">PERSONALIZAÇÃO</p>
+        <h1 id="settings-title">Ajustes</h1>
+        <p class="muted">Configure a hidratação e a data inicial do desafio.</p>
+      </div>
+      <section class="card settings-card">
+        <label for="water-goal-input">Meta diária de água (ml)</label>
+        <input id="water-goal-input" class="text-input" type="number" min="1" max="10000" step="100">
+        <label for="glass-size-input">Tamanho de cada copo (ml)</label>
+        <input id="glass-size-input" class="text-input" type="number" min="1" max="2000" step="50">
+        <label for="start-date-input">Data de início do desafio</label>
+        <input id="start-date-input" class="text-input" type="date">
+        <p class="muted">Alterar a data reposiciona os 30 dias do desafio; os registros de cada dia são mantidos.</p>
+        <p id="settings-message" class="success-message" role="status"></p>
+      </section>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Navegação principal">
+    <button class="nav-button active" type="button" data-target="inicio"><span>⌂</span>Início</button>
+    <button class="nav-button" type="button" data-target="diario"><span>✓</span>Diário</button>
+    <button class="nav-button" type="button" data-target="pode"><span>＋</span>Pode</button>
+    <button class="nav-button" type="button" data-target="evitar"><span>−</span>Evitar</button>
+    <button class="nav-button" type="button" data-target="rotulos"><span>ⓘ</span>Rótulos</button>
+  </nav>
+
+  <footer class="footer">
+    <button type="button" class="text-button" data-go="ajustes">Ajustes</button>
+    <span>Seus dados ficam salvos neste navegador.</span>
+  </footer>
+</body>
+</html>
